@@ -51,7 +51,7 @@ package object Comete {
 
       val min = min_p(f, 0.0, 1.0, 0.1)
 
-      f(min)
+      BigDecimal(f(min)).setScale(3, BigDecimal.RoundingMode.HALF_UP).doubleValue
     }
   }
 
@@ -60,7 +60,7 @@ package object Comete {
     // correspondiente medida que la calcula normalizada
     (distribution: Distribution) => {
       val pol = m(distribution)
-      pol/0.379
+      BigDecimal(pol/0.379).setScale(3, BigDecimal.RoundingMode.HALF_UP).doubleValue
     }
   }
 }

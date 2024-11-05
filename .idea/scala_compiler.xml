@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ScalaCompilerConfiguration">
-    <profile name="sbt 1" modules="Simulador de Polarizacion de Redes" />
-    <profile name="sbt 2" modules="Taller Paralelismo de Datos 2024-II">
+    <profile name="sbt 2" modules="Simulador de Polarizacion de Redes,Taller Paralelismo de Datos 2024-II">
       <option name="implicitConversions" value="true" />
       <option name="deprecationWarnings" value="true" />
     </profile>
