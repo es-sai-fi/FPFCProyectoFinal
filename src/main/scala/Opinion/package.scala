@@ -88,27 +88,16 @@ package object Opinion {
       val emptyClassification = (0 until k).map(i => i -> Vector.empty[Double]).toMap
       val classification = specificBelief.groupBy(a => intervals.zipWithIndex.indexWhere {
         case ((start, end), i) =>
-          if(i == k) (start <= a && a < end)
-          else (start <= a && a <= end)
+          if(i == k-1) (start <= a && a <= end)
+          else (start <= a && a < end)
       })
       val finalClassification = (emptyClassification ++ classification).toSeq.sortBy(_._1)
 
-      val frequency = finalClassification.map{ case (i, values) => (values.length.toDouble)/numAgents}
+      val frequency = finalClassification.map{ case (i, values) => (values.length.toDouble)/numAgents}.toVector
 
-      val tuples = frequency.zip(distributionValues)
-
-      def sum(p: Double, tuples: Seq[(Double, Double)]): Double = {
-        tuples.map{ case (pi,y) => Math.pow(pi, alpha) * Math.pow(Math.abs(y-p), beta)
-        }.sum
-      }
-
-      val f = (p: Double) => sum(p, tuples)
-
-      val min = min_p(f, 0.0, 1.0, 0.1)
-
-      val normalizedPol = f(min)/0.379
-
-      BigDecimal(normalizedPol).setScale(3, BigDecimal.RoundingMode.HALF_UP).doubleValue
+      val rhoAux = rhoCMT_Gen(alpha, beta)
+      val normalizarAux = normalizar(rhoAux)
+      normalizarAux((frequency, distributionValues))
     }
   }
 
