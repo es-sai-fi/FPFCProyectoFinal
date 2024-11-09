@@ -20,17 +20,18 @@ package object Comete {
     // Suponiendo que f es convexa
     // si max-min<prec, devuelve el punto medio de [min, max]
     if ((max-min)<prec) (min+max)/2.0 else {
-      val divideBy = 10.0
+      val divideBy = 20
       val intervalLength = (max-min)/divideBy
 
       val points = (BigDecimal(min) to BigDecimal(max) by intervalLength).map(x => (x.doubleValue, f(x.doubleValue)))
 
-      val (minP, _) = points.minBy(_._2)
+      val (minP, fx) = points.minBy(_._2)
 
-      val newMin = Math.max(min, minP-intervalLength/2.0)
-      val newMax = Math.min(max, minP+intervalLength/2.0)
-
-      min_p(f, newMin, newMax, prec)
+      if (fx == 0) minP else {
+        val newMin = Math.max(min, minP - intervalLength / 2.0)
+        val newMax = Math.min(max, minP + intervalLength / 2.0)
+        min_p(f, newMin, newMax, prec)
+      }
     }
   }
 
@@ -59,8 +60,16 @@ package object Comete {
     // Recibe una medida de polarizacion, y devuelve la
     // correspondiente medida que la calcula normalizada
     (distribution: Distribution) => {
+      val distributionValues = distribution._2
+      val k = distributionValues.length
+
+      val worstCaseFreq = Vector(0.5) ++ Vector.fill(k - 2)(0.0) ++ Vector(0.5)
+      val worstCasePol = m((worstCaseFreq, distributionValues))
+
       val pol = m(distribution)
-      BigDecimal(pol/0.379).setScale(3, BigDecimal.RoundingMode.HALF_UP).doubleValue
+      val normalizedPol = pol/worstCasePol
+
+      BigDecimal(normalizedPol).setScale(3, BigDecimal.RoundingMode.HALF_UP).doubleValue
     }
   }
 }
