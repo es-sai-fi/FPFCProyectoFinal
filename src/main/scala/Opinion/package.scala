@@ -120,15 +120,40 @@ package object Opinion {
 
   def simulate(fu: FunctionUpdate, swg: SpecificWeightedGraph, b0: SpecificBelief, t: Int): IndexedSeq[SpecificBelief] = {
 
-  }
+  }*/
 
   // Versiones paralelas
   def rhoPar(alpha: Double, beta: Double): AgentsPolMeasure = {
     // rho es la medida de polarizacion de agentes basada
     // en comete
+        (specificBelief: SpecificBelief, distributionValues: DistributionValues) => {
+      val numAgents = specificBelief.length
+      val k = distributionValues.length
+
+      val firstInterval = (0.0, distributionValues(1)/2)
+      val middleIntervals = (1 to k-2).par.map(i =>
+        ((distributionValues(i)+distributionValues(i-1))/2, (distributionValues(i)+distributionValues(i+1))/2)).toVector
+      val lastInterval = ((distributionValues(k-2)+1)/2, 1.0)
+
+      val intervals = firstInterval +: middleIntervals :+ lastInterval
+
+      val emptyClassification = (0 until k).map(i => i -> Vector.empty[Double]).toMap
+      val classification = specificBelief.par.groupBy(a => intervals.zipWithIndex.indexWhere {
+        case ((start, end), i) =>
+          if(i == k-1) (start <= a && a <= end)
+          else (start <= a && a < end)
+      })
+      val finalClassification = (emptyClassification ++ classification).toSeq.sortBy(_._1)
+
+      val frequency = finalClassification.map{ case (i, values) => values.knownSize.toDouble/numAgents}.toVector
+
+      val rhoAux = rhoCMT_Gen(alpha, beta)
+      val normalizarAux = normalizar(rhoAux)
+      normalizarAux((frequency, distributionValues))
+    }
   }
 
-  def confBiasUpdatePar(sb: SpecificBelief, swg: SpecificWeightedGraph): SpecificBelief = {
+  /*def confBiasUpdatePar(sb: SpecificBelief, swg: SpecificWeightedGraph): SpecificBelief = {
 
   }*/
 }
