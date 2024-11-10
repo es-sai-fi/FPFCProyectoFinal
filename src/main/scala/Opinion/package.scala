@@ -76,7 +76,7 @@ package object Opinion {
   }
 
   def confBiasUpdate(sb: SpecificBelief, swg: SpecificWeightedGraph): SpecificBelief = {
-    val k = swg._2
+    val k = sb.knownSize
     val I = swg._1
 
     def nbFunc(i: Int): Double = {
@@ -129,7 +129,7 @@ package object Opinion {
   }
 
   def confBiasUpdatePar(sb: SpecificBelief, swg: SpecificWeightedGraph): SpecificBelief = {
-    val k = swg._2
+    val k = sb.knownSize
     val I = swg._1
 
     def nbFunc(i: Int): Double = {
