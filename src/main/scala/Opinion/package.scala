@@ -90,9 +90,12 @@ package object Opinion {
     (0 until k).map(i => nbFunc(i)).toVector
   }
 
-  /*def simulate(fu: FunctionUpdate, swg: SpecificWeightedGraph, b0: SpecificBelief, t: Int): IndexedSeq[SpecificBelief] = {
-
-  }*/
+  def simulate(fu: FunctionUpdate, swg: SpecificWeightedGraph, b0: SpecificBelief, t: Int): IndexedSeq[SpecificBelief] = {
+    if (t == 0) IndexedSeq(b0) else {
+      val nb = fu(b0, swg)
+      IndexedSeq(b0) ++ simulate(fu, swg, nb, t-1)
+    }
+  }
 
   // Versiones paralelas
   def rhoPar(alpha: Double, beta: Double): AgentsPolMeasure = {
@@ -125,7 +128,18 @@ package object Opinion {
     }
   }
 
-  /*def confBiasUpdatePar(sb: SpecificBelief, swg: SpecificWeightedGraph): SpecificBelief = {
+  def confBiasUpdatePar(sb: SpecificBelief, swg: SpecificWeightedGraph): SpecificBelief = {
+    val k = swg._2
+    val I = swg._1
 
-  }*/
+    def nbFunc(i: Int): Double = {
+      def sum(i: Int): Double = {
+        (0 until k).par.map(j => (1-math.abs(sb(j)-sb(i))) * I(j,i) * (sb(j)-sb(i))).sum
+      }
+
+      sb(i) + sum(i)/(i+1)
+    }
+
+    (0 until k).par.map(i => nbFunc(i)).toVector
+  }
 }

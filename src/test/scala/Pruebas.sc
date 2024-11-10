@@ -170,3 +170,7 @@ val sbm_10 = midlyBelief(10)
 confBiasUpdate(sbm_10, i1_10)
 rho1(sbm_10, dist1)
 rho1(confBiasUpdate(sbm_10, i1_10), dist1)
+
+for{b <- simulate(confBiasUpdatePar, i1_10, sbu_10, 2)} yield (b, rho1(b, dist1))
+for{b <- simulate(confBiasUpdatePar, i1_10, sbm_10, 2)} yield (b, rho1(b, dist1))
+
