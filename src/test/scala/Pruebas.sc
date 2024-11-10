@@ -194,5 +194,5 @@ compararFuncionesAct(sbms.take(sbms.length/2), i2_32768, confBiasUpdate, confBia
 /*val evolsSec = for {
   i <- 0 until sbms.length
 } yield simEvolucion(Seq(sbms(i), sbes(i), sbts(i)), i2_32768, 10, polSec, confBiasUpdate, likert5,
-"Simulacion_Secuencial_" ++ i.toString ++ "__" ++ sbms(i ).length.toString)*/
+"Simulacion_Secuencial_" ++ i.toString ++ "__" ++ sbms(i).length.toString)*/
 
