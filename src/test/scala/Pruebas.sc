@@ -1,5 +1,6 @@
 import Comete._
 import Opinion._
+import Benchmark._
 
 // Build uniform belief state .
 def uniformBelief(nags: Int): SpecificBelief = {
@@ -173,4 +174,23 @@ rho1(confBiasUpdate(sbm_10, i1_10), dist1)
 
 for{b <- simulate(confBiasUpdatePar, i1_10, sbu_10, 2)} yield (b, rho1(b, dist1))
 for{b <- simulate(confBiasUpdatePar, i1_10, sbm_10, 2)} yield (b, rho1(b, dist1))
+
+val likert5=Vector(0.0 , 0.25, 0.5, 0.75, 1.0)
+val sbms = for{
+  n <- 2 until 16
+  nags = math.pow(2,n).toInt
+} yield midlyBelief(nags)
+val polSec = rho(1.2, 1.2)
+val polPar = rhoPar(1.2, 1.2)
+val cmp1 = compararMedidasPol(sbms, likert5, polSec, polPar)
+cmp1.map(t => t._6)
+
+val i1_32768 = i1(32768)
+val i2_32768 = i2(32768)
+compararFuncionesAct(sbms.take(sbms.length/2), i2_32768, confBiasUpdate, confBiasUpdatePar)
+
+/*val evolsSec = for {
+  i <- 0 until sbms.length
+} yield simEvolucion(Seq(sbms(i), sbes(i), sbts(i)), i2_32768, 10, polSec, confBiasUpdate, likert5,
+"Simulacion_Secuencial_" ++ i.toString ++ "__" ++ sbms(i ).length.toString)*/
 
