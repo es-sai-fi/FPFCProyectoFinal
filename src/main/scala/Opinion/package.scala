@@ -29,48 +29,6 @@ package object Opinion {
   // rho(sb,d) es la polarizacion de los agentes
   // de acuerdo a esa medida
 
-  // Build uniform belief state .
-  def uniformBelief(nags: Int): SpecificBelief = {
-    Vector.tabulate(nags)((i: Int) =>
-      (i + 1).toDouble / nags.toDouble)
-  }
-
-  // Builds mildly polarized belief state , in which
-  // half of agents has belief decreasing from 0.25, and
-  // half has belief increasing from 0.75, all by the given step.
-  def midlyBelief(nags: Int): SpecificBelief = {
-    val middle = nags / 2
-    Vector.tabulate(nags)((i: Int) =>
-      if (i < middle) Math.max(0.25-0.01*(middle-i-1), 0)
-      else Math.min(0.75-0.01*(middle-i), 1))
-  }
-
-  //Builds extreme polarized belief state , in which half
-  // of the agents has belief 0, and half has belief 1.
-  def allExtremeBelief(nags: Int): SpecificBelief = {
-    val middle = nags / 2
-    Vector.tabulate(nags)((i: Int) =>
-      if (i < middle) 0.0 else 1.0)
-  }
-
-  // Builds three pole belief state , in which each
-  // one third of the agents has belief 0, one third has belief 0.5,
-  // and one third has belief 1.
-  def allTripleBelief(nags: Int): SpecificBelief = {
-  val oneThird = nags / 3
-  val twoThird = (nags / 3)*2
-  Vector.tabulate(nags)((i: Int) =>
-    if (i < oneThird) 0.0
-    else if (i >= twoThird) 1.0
-      else 0.5)
-  }
-
-  // Builds consensus belief state , in which each
-  // All agents have same belief.
-  def consensusBelief(b:Double)(nags: Int ):SpecificBelief = {
-    Vector.tabulate(nags)((i: Int) => b)
-  }
-
   def rho(alpha: Double, beta: Double): AgentsPolMeasure = {
     // rho es la medida de polarizacion de agentes basada
     // en comete
@@ -110,15 +68,29 @@ package object Opinion {
 
   type FunctionUpdate = (SpecificBelief, SpecificWeightedGraph) => SpecificBelief
 
-  /*def confBiasUpdate(sb: SpecificBelief, swg: SpecificWeightedGraph): SpecificBelief = {
-
-  }
-
   def showWeightedGraph(swg: SpecificWeightedGraph): IndexedSeq[IndexedSeq[Double]] = {
-
+    val (f, k) = swg
+    for (i <- 0 until k) yield {
+      for (j <- 0 until k) yield f(i, j)
+    }
   }
 
-  def simulate(fu: FunctionUpdate, swg: SpecificWeightedGraph, b0: SpecificBelief, t: Int): IndexedSeq[SpecificBelief] = {
+  def confBiasUpdate(sb: SpecificBelief, swg: SpecificWeightedGraph): SpecificBelief = {
+    val k = swg._2
+    val I = swg._1
+
+    def nbFunc(i: Int): Double = {
+      def sum(i: Int): Double = {
+        (0 until k).map(j => (1-math.abs(sb(j)-sb(i))) * I(j,i) * (sb(j)-sb(i))).sum
+      }
+
+      sb(i) + sum(i)/(i+1)
+    }
+
+    (0 until k).map(i => nbFunc(i)).toVector
+  }
+
+  /*def simulate(fu: FunctionUpdate, swg: SpecificWeightedGraph, b0: SpecificBelief, t: Int): IndexedSeq[SpecificBelief] = {
 
   }*/
 

@@ -30,6 +30,7 @@ package object Comete {
       if (fx == 0) minP else {
         val newMin = Math.max(min, minP - intervalLength / 2.0)
         val newMax = Math.min(max, minP + intervalLength / 2.0)
+
         min_p(f, newMin, newMax, prec)
       }
     }
@@ -43,12 +44,12 @@ package object Comete {
       val distributionValues = distribution._2
       val tuples = frequency.zip(distributionValues)
 
-      def sum(p: Double, tuples: Seq[(Double, Double)]): Double = {
-        tuples.map{ case (pi,y) => Math.pow(pi, alpha) * Math.pow(Math.abs(y-p), beta)
+      def sum(p: Double): Double = {
+        tuples.map{ case (pi,y) => math.pow(pi, alpha) * math.pow(math.abs(y-p), beta)
         }.sum
       }
 
-      val f = (p: Double) => sum(p, tuples)
+      val f = (p: Double) => sum(p)
 
       val min = min_p(f, 0.0, 1.0, 0.1)
 
