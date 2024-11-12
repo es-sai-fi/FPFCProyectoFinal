@@ -1,5 +1,7 @@
 import Comete._
 import common._
+
+import scala.annotation.tailrec
 import scala.collection.parallel.CollectionConverters._
 package object Opinion {
   // Si n es el numero de agentes, estos se identifican
@@ -129,8 +131,39 @@ package object Opinion {
   }
 
   def confBiasUpdatePar(sb: SpecificBelief, swg: SpecificWeightedGraph): SpecificBelief = {
+    /*def umbral(npuntos:Int):Int = {
+      // Si npuntos= 2^n, entonces el umbral será 2^(n/2)
+      math.pow(2, ((math.log(npuntos)/math.log(2))/2).toInt).toInt
+    }*/
+
     val k = sb.knownSize
     val I = swg._1
+    /*val umb = umbral(k)
+
+    def parallelAux(subSb: SpecificBelief): SpecificBelief = {
+      val k = subSb.knownSize
+
+      if(k > umb) {
+        val (left, right) = sb.splitAt(k/2)
+
+        val (res1, res2) = parallel(parallelAux(left), parallelAux(right))
+
+        res1 ++ res2
+      } else {
+        /*def nbFunc(i: Int): Double = {
+          def sum(i: Int): Double = {
+            (0 until k).par.map(j => (1-math.abs(sb(j)-sb(i))) * I(j,i) * (sb(j)-sb(i))).sum
+          }
+
+          sb(i) + sum(i)/(i+1)
+        }
+
+        (0 until k).par.map(i => nbFunc(i)).toVector*/
+        confBiasUpdate(subSb, swg)
+      }
+    }
+
+    parallelAux(sb)*/
 
     def nbFunc(i: Int): Double = {
       def sum(i: Int): Double = {
