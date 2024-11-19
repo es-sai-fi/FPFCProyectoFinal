@@ -130,8 +130,16 @@ package object Benchmark {
       i <- 0 until sb.length
     } yield Scatter(ejet, evolPols(i)).withName(name ++ "-" ++ i.toString)
 
-    val laySimSeq = Layout().withTitle(name)
-    plotSim.plot("simulEvol.html", laySimSeq)
-    evolPols
-  }
+    // Definir la ruta de salida para el archivo HTML
+    val outputDir = "outputs"
+    val htmlFilePath = s"$outputDir/simulEvol.html"
+  
+    // Asegurarse de que la carpeta de salida exista
+    if (!Files.exists(Paths.get(outputDir))) {
+      Files.createDirectories(Paths.get(outputDir))
+    }
+  
+    // Generar el gráfico y guardarlo como HTML
+    plotSim.plot(htmlFilePath, laySimSeq)
+    }
 }
