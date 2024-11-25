@@ -199,8 +199,7 @@ val i2_32768 = i2(32768)
 //A partir de 128-256 agentes hay aceleración para mi, Jhorman. Tener esto en cuenta para el doc.
 compararFuncionesAct(sbms.take(sbms.length/2), i2_32768, confBiasUpdate, confBiasUpdatePar)
 
-/*val evolsSec = for {
-  i <- 0 until sbms.length
-} yield simEvolucion(Seq(sbms(i), sbes(i), sbts(i)), i2_32768, 10, polSec, confBiasUpdate, likert5,
-"Simulacion_Secuencial_" ++ i.toString ++ "__" ++ sbms(i).length.toString)*/
+simEvolucion(Seq(sbu_10, sbm_10), i2_32768, 2, polSec, confBiasUpdate, likert5,
+  "Simulacion_Secuencial_")
+
 
