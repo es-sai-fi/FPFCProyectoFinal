@@ -131,16 +131,16 @@ package object Opinion {
   }
 
   def confBiasUpdatePar(sb: SpecificBelief, swg: SpecificWeightedGraph): SpecificBelief = {
-    def umbral(npuntos:Int):Int = {
+    /*def umbral(npuntos:Int):Int = {
       // Si npuntos= 2^n, entonces el umbral será 2^(n/2)
       math.pow(2, ((math.log(npuntos)/math.log(2))/2).toInt).toInt
-    }
+    }*/
 
     val k = sb.knownSize
     val I = swg._1
-    val umb = umbral(k)
+    //val umb = umbral(k)
 
-    def parallelAux(subSb: SpecificBelief): SpecificBelief = {
+    /*def parallelAux(subSb: SpecificBelief): SpecificBelief = {
       val k = subSb.knownSize
 
       if(k > umb) {
@@ -163,9 +163,9 @@ package object Opinion {
       }
     }
 
-    parallelAux(sb)
+    parallelAux(sb)*/
 
-    /*def nbFunc(i: Int): Double = {
+    def nbFunc(i: Int): Double = {
       def sum(i: Int): Double = {
         (0 until k).par.map(j => (1-math.abs(sb(j)-sb(i))) * I(j,i) * (sb(j)-sb(i))).sum
       }
@@ -173,6 +173,6 @@ package object Opinion {
       sb(i) + sum(i)/(i+1)
     }
 
-    (0 until k).par.map(i => nbFunc(i)).toVector*/
+    (0 until k).par.map(i => nbFunc(i)).toVector
   }
 }
