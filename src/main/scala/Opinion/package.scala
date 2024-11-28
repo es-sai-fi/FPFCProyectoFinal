@@ -164,15 +164,16 @@ package object Opinion {
         res1 ++ res2
       } else {
         def nbFunc(i: Int): Double = {
+          val Ai = calcAi(i)
+
           def sum(i: Int): Double = {
-            (0 until k).par.map(j => (1-math.abs(sb(j)-sb(i))) * I(j,i) * (sb(j)-sb(i))).sum
+            Ai.map(j => (1-math.abs(sb(j)-sb(i))) * I(j,i) * (sb(j)-sb(i))).sum
           }
 
-          sb(i) + sum(i)/sizeAi(i)
+          sb(i) + sum(i)/Ai.knownSize
         }
 
         (0 until k).par.map(i => nbFunc(i)).toVector
-        confBiasUpdate(subSb, swg)
       }
     }
 
