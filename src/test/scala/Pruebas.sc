@@ -150,6 +150,6 @@ val i1_32768 = i1(32768)
 val i2_32768 = i2(32768)
 val res = compararFuncionesAct(sbms.take(sbms.length/2), i2_32768, confBiasUpdate, confBiasUpdatePar)
 res.map(t => t._4)
-cmp1.map(t => t._2)
-cmp1.map(t => t._3)
+res.map(t => t._2)
+res.map(t => t._3)
 
