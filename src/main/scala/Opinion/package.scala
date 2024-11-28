@@ -80,10 +80,10 @@ package object Opinion {
   def confBiasUpdate(sb: SpecificBelief, swg: SpecificWeightedGraph): SpecificBelief = {
     val k = sb.knownSize
     val I = swg._1
-    val A = (0 until k)
+    val range = (0 until k)
 
     def calcAi(i: Int): Vector[Int] = {
-      A.filter(j => I(j,i)>0).toVector
+      range.filter(j => I(j,i)>0).toVector
     }
 
     def nbFunc(i: Int): Double = {
@@ -96,7 +96,7 @@ package object Opinion {
       sb(i) + sum(i)/Ai.knownSize
     }
 
-    (0 until k).map(i => nbFunc(i)).toVector
+    range.map(i => nbFunc(i)).toVector
   }
 
   def simulate(fu: FunctionUpdate, swg: SpecificWeightedGraph, b0: SpecificBelief, t: Int): IndexedSeq[SpecificBelief] = {
@@ -138,18 +138,18 @@ package object Opinion {
   }
 
   def confBiasUpdatePar(sb: SpecificBelief, swg: SpecificWeightedGraph): SpecificBelief = {
-    def umbral(npuntos:Int):Int = {
+    /*def umbral(npuntos:Int):Int = {
       // Si npuntos= 2^n, entonces el umbral será 2^(n/2)
       math.pow(2, ((math.log(npuntos)/math.log(2))/2).toInt).toInt
-    }
+    }*/
 
     val k = sb.knownSize
     val I = swg._1
-    val A = (0 until k).par
-    val umb = umbral(k)
+    val range = (0 until k).par
+    //val umb = umbral(k)
 
     def calcAi(i: Int): Vector[Int] = {
-      A.filter(j => I(j,i)>0).toVector
+      range.filter(j => I(j,i)>0).toVector
     }
 
     def nbFunc(i: Int): Double = {
@@ -162,7 +162,9 @@ package object Opinion {
       sb(i) + sum(i)/Ai.knownSize
     }
 
-    def parallelAux(subSb: SpecificBelief): SpecificBelief = {
+    range.map(i => nbFunc(i)).toVector
+
+    /*def parallelAux(subSb: SpecificBelief): SpecificBelief = {
       val k = subSb.knownSize
 
       if(k > umb) {
@@ -172,12 +174,10 @@ package object Opinion {
 
         res1 ++ res2
       } else {
-        (0 until k).par.map(i => nbFunc(i)).toVector
+        range.map(i => nbFunc(i)).toVector
       }
     }
 
-    parallelAux(sb)
-
-    //(0 until k).par.map(i => nbFunc(i)).toVector
+    parallelAux(sb)*/
   }
 }
