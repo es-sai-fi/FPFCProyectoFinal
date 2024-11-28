@@ -80,7 +80,7 @@ package object Opinion {
   def confBiasUpdate(sb: SpecificBelief, swg: SpecificWeightedGraph): SpecificBelief = {
     val k = sb.knownSize
     val I = swg._1
-    val A = (0 until swg._2)
+    val A = (0 until k)
 
     def calcAi(i: Int): Vector[Int] = {
       A.filter(j => I(j,i)>0).toVector
@@ -145,7 +145,7 @@ package object Opinion {
 
     val k = sb.knownSize
     val I = swg._1
-    val A = (0 until swg._2).par
+    val A = (0 until k).par
 
     def calcAi(i: Int): Vector[Int] = {
       A.filter(j => I(j,i)>0).toVector
