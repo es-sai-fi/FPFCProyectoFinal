@@ -2,55 +2,6 @@ import Comete._
 import Opinion._
 import Benchmark._
 
-// Build uniform belief state .
-def uniformBelief(nags: Int): SpecificBelief = {
-  Vector.tabulate(nags)((i: Int) =>
-    (i + 1).toDouble / nags.toDouble)
-}
-// Builds mildly polarized belief state , in which
-// half of agents has belief decreasing from 0.25, and
-// half has belief increasing from 0.75, all by the given step.
-def midlyBelief(nags: Int): SpecificBelief = {
-  val middle = nags / 2
-  Vector.tabulate(nags)((i: Int) =>
-    if (i < middle) Math.max(0.25-0.01*(middle-i-1), 0)
-    else Math.min(0.75-0.01*(middle-i), 1))
-}
-//Builds extreme polarized belief state , in which half
-// of the agents has belief 0, and half has belief 1.
-def allExtremeBelief(nags: Int): SpecificBelief = {
-  val middle = nags / 2
-  Vector.tabulate(nags)((i: Int) =>
-    if (i < middle) 0.0 else 1.0)
-}
-// Builds three pole belief state , in which each
-// one third of the agents has belief 0, one third has belief 0.5,
-// and one third has belief 1.
-def allTripleBelief(nags: Int): SpecificBelief = {
-  val oneThird = nags / 3
-  val twoThird = (nags / 3)*2
-  Vector.tabulate(nags)((i: Int) =>
-    if (i < oneThird) 0.0
-    else if (i >= twoThird) 1.0
-    else 0.5)
-}
-// Builds consensus belief state , in which each
-// All agents have same belief.
-def consensusBelief(b:Double)(nags: Int ):SpecificBelief = {
-  Vector.tabulate(nags)((i: Int) => b)
-}
-
-def i1(nags:Int ):SpecificWeightedGraph = {
-  (( i : Int , j : Int) => if (i==j) 1.0
-  else if (i<j) 1.0/(j-i).toDouble
-  else 0.0, nags)
-}
-def i2(nags:Int ):SpecificWeightedGraph = {
-  (( i : Int , j : Int) => if (i==j) 1.0
-  else if (i<j) (j-i).toDouble/nags.toDouble
-  else (nags-(i-j)).toDouble/nags.toDouble , nags)
-}
-
 val pi_max = Vector(0.5 , 0.0, 0.0, 0.0, 0.5)
 val pi_min = Vector(0.0 , 0.0, 1.0, 0.0, 0.0)
 val pi_der = Vector(0.4 , 0.0, 0.0, 0.0, 0.6)
@@ -175,7 +126,7 @@ rho1(confBiasUpdate(sbm_10, i1_10), dist1)
 for{b <- simulate(confBiasUpdate, i1_10, sbu_10, 2)} yield (b, rho1(b, dist1))
 for{b <- simulate(confBiasUpdate, i1_10, sbm_10, 2)} yield (b, rho1(b, dist1))
 
-val likert5=Vector(0.0 , 0.25, 0.5, 0.75, 1.0)
+val likert5 = Vector(0.0 , 0.25, 0.5, 0.75, 1.0)
 val sbms = for{
   n <- 2 until 16
   nags = math.pow(2, n).toInt
@@ -199,7 +150,9 @@ val i2_32768 = i2(32768)
 //A partir de 128-256 agentes hay aceleración para mi, Jhorman. Tener esto en cuenta para el doc.
 compararFuncionesAct(sbms.take(sbms.length/2), i2_32768, confBiasUpdate, confBiasUpdatePar)
 
-simEvolucion(Seq(sbu_10, sbm_10), i2_32768, 2, polSec, confBiasUpdate, likert5,
+val evolsSec = for {
+  i <- 0 until sbms.length
+} yield simEvolucion(Seq(sbms(i), sbes(i), sbts(i)), i2_32768, 10, polSec, confBiasUpdate, likert5,
   "Simulacion_Secuencial_")
 
 
