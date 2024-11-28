@@ -148,7 +148,7 @@ cmp1.map(t => t._5)
 
 val i1_32768 = i1(32768)
 val i2_32768 = i2(32768)
-val res = compararFuncionesAct(sbms.take(8), i2_32768, confBiasUpdate, confBiasUpdatePar)
+val res = compararFuncionesAct(sbms.take(12), i2_32768, confBiasUpdate, confBiasUpdatePar)
 res.map(t => t._4)
 res.map(t => t._2)
 res.map(t => t._3)
