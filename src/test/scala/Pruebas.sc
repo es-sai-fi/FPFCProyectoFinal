@@ -141,13 +141,11 @@ val sbts = for {
 } yield allTripleBelief(nags)
 val polSec = rho(1.2, 1.2)
 val polPar = rhoPar(1.2, 1.2)
-//A partir de 2048 agentes hay aceleración para mi, Jhorman. Tener esto en cuenta para el doc.
 val cmp1 = compararMedidasPol(sbms, likert5, polSec, polPar)
 cmp1.map(t => t._6)
 
 val i1_32768 = i1(32768)
 val i2_32768 = i2(32768)
-//A partir de 128-256 agentes hay aceleración para mi, Jhorman. Tener esto en cuenta para el doc.
 compararFuncionesAct(sbms.take(sbms.length/2), i2_32768, confBiasUpdate, confBiasUpdatePar)
 
 
